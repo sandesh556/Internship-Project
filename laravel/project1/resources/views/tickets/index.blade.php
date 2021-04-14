@@ -8,6 +8,11 @@
                 <div class="clearfix"></div>
             </div>
             <div class="card-body mt-2">
+                @if (session('status'))
+                    <div class="alert alert-success">
+                        {{ session('status') }}
+                    </div>
+                @endif
                 @if ($tickets->isEmpty())
                     <p> There is no ticket.</p>
                 @else
@@ -22,8 +27,12 @@
                         <tbody>
                         @foreach($tickets as $ticket)
                             <tr>
-                                <td>{{ $ticket->id }} </td>
-                                <td>{{ $ticket->title }}</td>
+
+                                <td>{{ $ticket->id }}</td>
+                                <td>
+                                    <a href="{{ action([\App\Http\Controllers\TicketsController::class,'show'], $ticket->slug) }}">
+                                        {{ $ticket->title }} </a>
+                                </td>
                                 <td>{{ $ticket->status ? 'Pending' : 'Answered' }}</td>
                             </tr>
                         @endforeach
