@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\TicketFormRequest;
 use Illuminate\Http\Request;
+use App\Models\Ticket;
+use voku\helper\ASCII;
+
 
 class TicketsController extends Controller
 {
@@ -13,7 +17,10 @@ class TicketsController extends Controller
      */
     public function index()
     {
-        //
+        $tickets = Ticket::all();
+        return view('tickets.index',compact('tickets'));
+        //return view('tickets.index)->with('tickets',$tickets);
+        //return view('tickets.index',['tickets'=>$tickets]);
     }
 
     /**
@@ -32,9 +39,16 @@ class TicketsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(TicketFormRequest $request)
     {
-        //
+        $slug = uniqid();
+        $ticket = new Ticket(array(
+            'title'=>$request->get('title'),
+            'content'=>$request->get('content'),
+            'slug'=>$slug
+        ));
+        $ticket->save();
+        return  redirect('/contact')->with('status','Your Ticket has been created with unique id of ' .$slug);
     }
 
     /**
@@ -43,9 +57,10 @@ class TicketsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($slug)
     {
-        //
+        $ticket = Ticket::whereSlug($slug)->firstOrFail();
+        return view('tickets.show',compact('ticket'));
     }
 
     /**
