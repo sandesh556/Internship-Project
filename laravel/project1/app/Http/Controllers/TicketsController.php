@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Ticket;
 use voku\helper\ASCII;
 
-
+use Illuminate\Support\Facades\Mail;
 class TicketsController extends Controller
 {
     /**
@@ -42,12 +42,20 @@ class TicketsController extends Controller
     public function store(TicketFormRequest $request)
     {
         $slug = uniqid();
-        $ticket = new Ticket(array(
+        $ticket = new Ticket( array(
             'title'=>$request->get('title'),
             'content'=>$request->get('content'),
             'slug'=>$slug
         ));
         $ticket->save();
+        $data = array(
+            'ticket' => $slug,
+        );
+        Mail::send('emails.ticket', $data, function ($message) {
+            $message->from('admin@example.com', 'Learning Laravel');
+            $message->to('sandeshm40450@gmail.com')->subject('There is a new ticket!');
+        });
+
         return  redirect('/contact')->with('status','Your Ticket has been created with unique id of ' .$slug);
     }
 
