@@ -22,3 +22,4 @@ Route::get('/tickets/{slug}',[\App\Http\Controllers\TicketsController::class,'sh
 Route::get('/tickets/{slug}/edit',[\App\Http\Controllers\TicketsController::class,'edit']);
 Route::post('/tickets/{slug}/edit',[\App\Http\Controllers\TicketsController::class,'update']);
 Route::post('/tickets/{slug}/delete',[\App\Http\Controllers\TicketsController::class,'destroy']);
+Route::post('/comments',[App\Http\Controllers\CommentsController::class,'newComment']);
