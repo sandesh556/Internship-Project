@@ -1,6 +1,10 @@
 <?php
 
+
+
+namespace App\Http\Controllers\Admin;
 use Illuminate\Support\Facades\Route;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -17,9 +21,39 @@ Route::get('/', [\App\Http\Controllers\PagesController::class,'home']);
 Route::get('/about',[\App\Http\Controllers\PagesController::class,'about']);
 Route::get('/contact',[\App\Http\Controllers\TicketsController::class,'create']);
 Route::post('/contact',[\App\Http\Controllers\TicketsController::class,'store']);
-Route::get('/tickets',[\App\Http\Controllers\TicketsController::class,'index']);
-Route::get('/tickets/{slug}',[\App\Http\Controllers\TicketsController::class,'show']);
-Route::get('/tickets/{slug}/edit',[\App\Http\Controllers\TicketsController::class,'edit']);
-Route::post('/tickets/{slug}/edit',[\App\Http\Controllers\TicketsController::class,'update']);
-Route::post('/tickets/{slug}/delete',[\App\Http\Controllers\TicketsController::class,'destroy']);
-Route::post('/comments',[App\Http\Controllers\CommentsController::class,'newComment']);
+Route::post('/comments',[\App\Http\Controllers\CommentsController::class,'newComment']);
+
+
+Route::get('/register', [\App\Http\Controllers\PassportController::class,'showRegistrationForm']);
+Route::post('/register', [\App\Http\Controllers\PassportController::class,'register']);
+Route::get('/login', [\App\Http\Controllers\PassportController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [\App\Http\Controllers\PassportController::class,'login']);
+Route::get('/logout', [\App\Http\Controllers\Auth\LoginController::class,'logout']);
+
+Route::group(array('prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 'auth')
+    , function () {
+        Route::get('users', [UsersController::class,'index']);
+        Route::get('/tickets',[\App\Http\Controllers\TicketsController::class,'index']);
+        Route::get('/tickets/{slug}',[\App\Http\Controllers\TicketsController::class,'show']);
+        Route::get('/tickets/{slug}/edit',[\App\Http\Controllers\TicketsController::class,'edit']);
+        Route::post('/tickets/{slug}/edit',[\App\Http\Controllers\TicketsController::class,'update']);
+        Route::post('/tickets/{slug}/delete',[\App\Http\Controllers\TicketsController::class,'destroy']);
+
+
+
+    });
+
+Route::middleware('auth:api')->group(function () {
+    Route::get('user', [\App\Http\Controllers\PassportController::class,'details']);
+   // Route::resource('Ticket', [\App\Http\Controllers\TicketsController::class]);
+
+
+});
+
+/*Auth::routes();
+
+ Route::get('/home', [App\Http\Controllers\PagesController::class, 'home'])->name('home');
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\PagesController::class, 'home'])->name('home');*/
