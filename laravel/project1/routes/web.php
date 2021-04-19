@@ -3,6 +3,7 @@
 
 
 namespace App\Http\Controllers\Admin;
+
 use Illuminate\Support\Facades\Route;
 
 
@@ -30,17 +31,36 @@ Route::get('/login', [\App\Http\Controllers\PassportController::class, 'showLogi
 Route::post('/login', [\App\Http\Controllers\PassportController::class,'login']);
 Route::get('/logout', [\App\Http\Controllers\Auth\LoginController::class,'logout']);
 
-Route::group(array('prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 'auth')
+Route::group(array('prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 'manager')
     , function () {
         Route::get('users', [UsersController::class,'index']);
+        Route::get('roles',[RolesController::class,'index']);
+        Route::get('roles/create',[RolesController::class,'create']);
+        Route::post('roles/create',[RolesController::class,'store']);
+        Route::get('users/{id?}/edit', [UsersController::class,'edit']);
+        Route::post('users/{id?}/edit',[UsersController::class,'update']);
+        Route::get('/',[PagesController::class,'home']);
+        Route::get('posts', [PostsController::class,'index']);
+        Route::get('posts/create', [PostsController::class,'create']);
+        Route::post('posts/create', [PostsController::class,'store']);
+        Route::get('posts/{id?}/edit', [PostsController::class,'edit']);
+        Route::post('posts/{id?}/edit',[PostsController::class,'update']);
+
+
+
+
+
+
+
+
+
+
+
         Route::get('/tickets',[\App\Http\Controllers\TicketsController::class,'index']);
         Route::get('/tickets/{slug}',[\App\Http\Controllers\TicketsController::class,'show']);
         Route::get('/tickets/{slug}/edit',[\App\Http\Controllers\TicketsController::class,'edit']);
         Route::post('/tickets/{slug}/edit',[\App\Http\Controllers\TicketsController::class,'update']);
         Route::post('/tickets/{slug}/delete',[\App\Http\Controllers\TicketsController::class,'destroy']);
-
-
-
     });
 
 Route::middleware('auth:api')->group(function () {

@@ -25,6 +25,9 @@ button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbar
 Dropdown">
                     @if (Auth::check())
+                        @role('Admin')
+                        <a class="dropdown-item" href="/admin">Admin</a>
+                        @endrole
                         <a class="dropdown-item" href="/logout">Logout</a>
                     @else
                         <a class="dropdown-item" href="/register">Register</a>

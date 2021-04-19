@@ -1,10 +1,10 @@
 @extends('master')
-@section('title', 'All users')
+@section('title', 'All roles')
 @section('content')
     <div class="container col-md-10 col-md-offset-2">
         <div class="card mt-5">
             <div class="card-header">
-                <h5 class="float-left">All users</h5>
+                <h5 class="float-left">All roles</h5>
                 <div class="clearfix"></div>
             </div>
             <div class="content">
@@ -13,28 +13,20 @@
                         {{ session('status') }}
                     </div>
                 @endif
-                @if ($users->isEmpty())
-                    <p> There is no user.</p>
+                @if ($roles->isEmpty())
+                    <p> There is no role.</p>
                 @else
                     <div class="table-responsive">
                         <table class="table">
                             <thead>
                             <tr>
-                                <th>ID</th>
                                 <th>Name</th>
-                                <th>Email</th>
-                                <th>Joined at</th>
                             </tr>
                             </thead>
                             <tbody>
-                            @foreach($users as $user)
+                            @foreach($roles as $role)
                                 <tr>
-                                    <td>{{ $user->id }}</td>
-                                    <td>
-                                        <a href="{{ action([App\Http\Controllers\Admin\UsersController::class,'edit'], $user->id) }}">{{ $user->name }} </a>
-                                    </td>
-                                    <td>{{ $user->email }}</td>
-                                    <td>{{ $user->created_at }}</td>
+                                    <td>{{ $role->name }}</td>
                                 </tr>
                             @endforeach
                             </tbody>
@@ -44,5 +36,4 @@
             </div>
         </div>
     </div>
-
 @endsection
