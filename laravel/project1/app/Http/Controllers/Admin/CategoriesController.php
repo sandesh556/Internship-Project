@@ -3,9 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use Illuminate\Http\Request;
+use phpseclib3\File\ASN1\Maps\RelativeDistinguishedName;
+use App\Http\Requests\CategoryFormRequest;
 
-class PostsController extends Controller
+class CategoriesController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,7 +17,8 @@ class PostsController extends Controller
      */
     public function index()
     {
-
+        $categories = Category::all();
+        return view('backend.categories.index',compact('categories'));
     }
 
     /**
@@ -24,7 +28,7 @@ class PostsController extends Controller
      */
     public function create()
     {
-        return view('backend.posts.create');
+        return view('backend.categories.create');
     }
 
     /**
@@ -33,9 +37,13 @@ class PostsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CategoryFormRequest $request)
     {
-        //
+        $category = new Category(array(
+            'name'=>$request->get('name')
+        ));
+        $category->save();
+        return redirect('admin/categories/create')->with('status','You have created a new post');
     }
 
     /**

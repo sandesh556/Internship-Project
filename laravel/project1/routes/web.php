@@ -45,6 +45,9 @@ Route::group(array('prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 
         Route::post('posts/create', [PostsController::class,'store']);
         Route::get('posts/{id?}/edit', [PostsController::class,'edit']);
         Route::post('posts/{id?}/edit',[PostsController::class,'update']);
+        Route::get('categories',[CategoriesController::class,'index']);
+        Route::get('categories/create',[CategoriesController::class,'create']);
+        Route::post('categories/create',[CategoriesController::class,'store']);
 
 
 

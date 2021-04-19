@@ -30,6 +30,14 @@
                         </div>
                     </div>
                     <div class="list-group-separator"></div>
+                    <div class="list-group-item">
+                        <div class="row-content">
+                            <h5><i class="fas fa-cogs"></i> Manage Categories</h5>
+                            <a href="/admin/categories" class="btn btn-info">All Categories</a>
+                            <a href="/admin/categories/create" class="btn btn-success">New Category</a>
+                        </div>
+                    </div>
+                    <div class="list-group-separator"></div>
                 </div>
             </div>
         </div>
