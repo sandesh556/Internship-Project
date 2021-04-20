@@ -3,7 +3,13 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\PostEditFormRequest;
 use Illuminate\Http\Request;
+use App\Models\Category;
+use App\Models\Post;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\PostsFormRequest;
 
 class PostsController extends Controller
 {
@@ -14,7 +20,8 @@ class PostsController extends Controller
      */
     public function index()
     {
-
+       $posts = Post::all();
+       return view('backend.posts.index',compact('posts'));
     }
 
     /**
@@ -24,7 +31,8 @@ class PostsController extends Controller
      */
     public function create()
     {
-        return view('backend.posts.create');
+        $categories = Category::all();
+        return view('backend.posts.create',compact('categories'));
     }
 
     /**
@@ -33,9 +41,19 @@ class PostsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(PostsFormRequest $request)
     {
-        //
+         $user_id = Auth::user()->id;
+         $post = new Post(array(
+             'title'=>$request->get('title'),
+             'content'=>$request->get('content'),
+             'slug'=>str::slug($request->get('title'),'-'),
+             'user_id'=>$user_id
+         ));
+         $post->save();
+         $post->categories()->sync($request->get('categories'));
+         return redirect('admin/posts/create')->with('status','A new post has been registered');
+
     }
 
     /**
@@ -57,7 +75,10 @@ class PostsController extends Controller
      */
     public function edit($id)
     {
-        //
+        $post = Post::whereId($id)->firstOrFail();
+        $categories = Category::all();
+        $selectedCategories = $post->categories->pluck('id')->toArray();
+        return view('backend.posts.edit', compact('post', 'categories', 'selectedCategories'));
     }
 
     /**
@@ -67,9 +88,15 @@ class PostsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(PostEditFormRequest $request, $id)
     {
-        //
+         $post = Post::whereId($id)->firstOrFail();
+         $post->title = $request->get('title');
+         $post->content = $request->get('content');
+         $post->slug = str::slug($request->get('title'),'-');
+         $post->save();
+         $post->categories()->sync($request->get('categories'));
+         return redirect(action([PostsController::class,'edit'],$post->id))->with('status','Your post is updated');
     }
 
     /**
