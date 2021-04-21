@@ -16,4 +16,7 @@ class Ticket extends Model
     public function comment(){
         return $this->hasMany('App\Models\Comment','post_id');
     }
+    public function comments(){
+        return $this->morphMany(Comment::class,'post');
+    }
 }

@@ -45,9 +45,11 @@ class BlogController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($slug)
     {
-        //
+        $post = Post::whereSlug($slug)->firstOrFail();
+        $comments = $post->comments()->get();
+        return view('blog.show',compact('post','comments'));
     }
 
     /**

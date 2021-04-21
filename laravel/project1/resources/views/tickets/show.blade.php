@@ -8,8 +8,7 @@
                 <div class="clearfix"></div>
             </div>
             <div class="card-body">
-                <p> <strong>Status</strong>: {{ $ticket->status ? 'Pending' : 'Answere
-d' }}</p>
+                <p> <strong>Status</strong>: {{ $ticket->status ? 'Pending' : 'Answered' }}</p>
                 <p> {{ $ticket->content }} </p>
                 <a href="{{action([\App\Http\Controllers\TicketsController::class,'edit'],$ticket->slug)}}" class="btn btn-info">Edit</a>
                 <form method="post"
@@ -32,7 +31,7 @@ d' }}</p>
             </div>
         @endforeach
         <div class="card mt-3">
-            <form method="post" action="/comments">
+            <form method="post" action="/comment">
                 {!! csrf_field() !!}
                 @foreach($errors->all() as $error)
                     <p class="alert alert-danger">{{ $error }}</p>
@@ -43,6 +42,7 @@ d' }}</p>
                     </div>
                 @endif
                 <input type="hidden" name="post_id" value="{{ $ticket->id }}">
+                <input type="hidden" name="post_type" value="App\Models\Ticket">
                 <fieldset>
                     <legend class="ml-3">Reply</legend>
                     <div class="form-group">

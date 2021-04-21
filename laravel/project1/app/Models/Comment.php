@@ -10,6 +10,11 @@ class Comment extends Model
     use HasFactory;
     protected $guarded = ['id'];
     public function ticket(){
-        return $this->belongsTo('App\Models\Ticket');
+
+       return $this->belongsTo('App\Models\Ticket');
+
+    }
+    public function post(){
+        return $this->morphTo();
     }
 }

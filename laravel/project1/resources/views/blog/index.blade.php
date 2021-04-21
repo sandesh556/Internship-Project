@@ -12,7 +12,7 @@
         @else
             @foreach ($posts as $post)
                 <div class="card mt-4">
-                    <div class="card-header">{{ $post->title }}</div>
+                    <div class="card-header"><a href="{{action([\App\Http\Controllers\BlogController::class,'show'],$post->slug)}}">{{ $post->title }}</a></div>
                     <div class="card-body">
                         {{ mb_substr($post->content,0,500) }}  <!-- to only display 500 characters -->
                     </div>

@@ -23,7 +23,9 @@ Route::get('/', [\App\Http\Controllers\PagesController::class,'home']);
 Route::get('/about',[\App\Http\Controllers\PagesController::class,'about']);
 Route::get('/contact',[\App\Http\Controllers\TicketsController::class,'create']);
 Route::post('/contact',[\App\Http\Controllers\TicketsController::class,'store']);
-Route::post('/comments',[\App\Http\Controllers\CommentsController::class,'newComment']);
+
+
+Route::post('/comment',[\App\Http\Controllers\CommentsController::class,'newComment']);
 
 
 Route::get('/register', [\App\Http\Controllers\PassportController::class,'showRegistrationForm']);
@@ -62,6 +64,9 @@ Route::group(array('prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 
         Route::get('/tickets/{slug}/edit',[\App\Http\Controllers\TicketsController::class,'edit']);
         Route::post('/tickets/{slug}/edit',[\App\Http\Controllers\TicketsController::class,'update']);
         Route::post('/tickets/{slug}/delete',[\App\Http\Controllers\TicketsController::class,'destroy']);
+
+
+
     });
 
 Route::middleware('auth:api')->group(function () {
