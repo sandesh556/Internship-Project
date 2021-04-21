@@ -4,6 +4,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\BlogController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -30,34 +31,31 @@ Route::post('/register', [\App\Http\Controllers\PassportController::class,'regis
 Route::get('/login', [\App\Http\Controllers\PassportController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [\App\Http\Controllers\PassportController::class,'login']);
 Route::get('/logout', [\App\Http\Controllers\Auth\LoginController::class,'logout']);
+Route::get('/blog',[BlogController::class,'index']);
+Route::get('/blog/{slug}',[BlogController::class,'show']);
 
 Route::group(array('prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 'manager')
     , function () {
+        Route::get('/',[PagesController::class,'home']);
+
         Route::get('users', [UsersController::class,'index']);
+        Route::get('users/{id?}/edit', [UsersController::class,'edit']);
+        Route::post('users/{id?}/edit',[UsersController::class,'update']);
+
         Route::get('roles',[RolesController::class,'index']);
         Route::get('roles/create',[RolesController::class,'create']);
         Route::post('roles/create',[RolesController::class,'store']);
-        Route::get('users/{id?}/edit', [UsersController::class,'edit']);
-        Route::post('users/{id?}/edit',[UsersController::class,'update']);
-        Route::get('/',[PagesController::class,'home']);
+
+
         Route::get('posts', [PostsController::class,'index']);
         Route::get('posts/create', [PostsController::class,'create']);
         Route::post('posts/create', [PostsController::class,'store']);
         Route::get('posts/{id?}/edit', [PostsController::class,'edit']);
         Route::post('posts/{id?}/edit',[PostsController::class,'update']);
+
         Route::get('categories',[CategoriesController::class,'index']);
         Route::get('categories/create',[CategoriesController::class,'create']);
         Route::post('categories/create',[CategoriesController::class,'store']);
-
-
-
-
-
-
-
-
-
-
 
         Route::get('/tickets',[\App\Http\Controllers\TicketsController::class,'index']);
         Route::get('/tickets/{slug}',[\App\Http\Controllers\TicketsController::class,'show']);
@@ -69,6 +67,7 @@ Route::group(array('prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 
 Route::middleware('auth:api')->group(function () {
     Route::get('user', [\App\Http\Controllers\PassportController::class,'details']);
    // Route::resource('Ticket', [\App\Http\Controllers\TicketsController::class]);
+
 
 
 });
